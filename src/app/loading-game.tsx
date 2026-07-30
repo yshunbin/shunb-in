@@ -76,32 +76,31 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 10, y + 10, 20, 12);
     }
 
-    // Render White + Brown/Black Tabby American Curl Cat with Directional Tail & Yellow-Gold Eyes
+    // Render Tabby American Curl Cat with Natural Tail Lag (Opposite to movement)
     let tailAngle = 0;
     function drawAmericanCurlCat(x: number, y: number, deltaX: number, moving: boolean) {
       if (!ctx) return;
 
-      // Animate tail sway speed
+      // Animate tail sway
       if (moving) {
         tailAngle += 0.25; 
       } else {
         tailAngle += 0.05; 
       }
-      const tailWiggle = Math.sin(tailAngle) * 6;
+      const tailWiggle = Math.sin(tailAngle) * 5;
 
-      // Calculate direction lean based on movement delta (positive = right, negative = left)
-      // Clamped to avoid extreme stretching
-      const directionOffset = Math.max(-12, Math.min(12, deltaX * 1.5));
+      // --- NATURAL INERTIA TAIL LOGIC ---
+      // Negative deltaX flips tail in OPPOSITE direction of movement drag
+      const dragOffset = Math.max(-14, Math.min(14, -deltaX * 2.2));
 
-      // --- Directional Tail (White base, brown tip) ---
       // Base attachment at back of cat body
       const tailBaseX = x - 10;
       const tailBaseY = y + 4;
       
-      // Control point and tip shift towards movement direction
-      const controlX = tailBaseX - 8 + directionOffset;
+      // Tail curves away from motion direction
+      const controlX = tailBaseX - 8 + dragOffset;
       const controlY = tailBaseY - 10 + tailWiggle;
-      const tipX = tailBaseX - 12 + directionOffset * 1.2 + tailWiggle;
+      const tipX = tailBaseX - 12 + dragOffset * 1.3 + tailWiggle;
       const tipY = tailBaseY - 18;
 
       // Draw Tail Base (White)
@@ -143,7 +142,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x + 9, y - 24, 3, 4);
 
       // Yellow-Gold Eyes
-      ctx.fillStyle = "#eab308"; // Warm Yellow-Gold
+      ctx.fillStyle = "#eab308"; 
       ctx.fillRect(x - 5, y - 14, 3, 3);
       ctx.fillRect(x + 2, y - 14, 3, 3);
     }
@@ -176,13 +175,13 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       const catTargetX = boy.x - 45;
       cat.x += (catTargetX - cat.x) * 0.08;
 
-      // Calculate horizontal movement vector of the cat for directional tail lean
+      // Movement vector of cat
       const deltaCatX = cat.x - prevCatX;
       prevCatX = cat.x;
 
       ctx.clearRect(0, 0, width, height);
 
-      // Draw entities
+      // Render entities
       drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 1 || isMoving);
       drawPixelBoy(boy.x, boy.y);
 
