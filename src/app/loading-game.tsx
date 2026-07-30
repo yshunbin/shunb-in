@@ -44,6 +44,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     const boy = { x: width / 2, y: height - 80, size: 36 };
     const cat = { x: width / 2 - 45, y: height - 70, size: 24 };
     const sourdoughs: Array<{ x: number; y: number; speed: number; size: number }> = [];
+    const poops: Array<{ x: number; y: number; size: number }> = [];
 
     const spawnInterval = setInterval(() => {
       sourdoughs.push({
@@ -76,27 +77,43 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 10, y + 10, 20, 12);
     }
 
-    // Render Tabby American Curl Cat (Tail hidden by default on back, extends out when moving)
+    // Render Cat Poop
+    function drawPoop(x: number, y: number) {
+      if (!ctx) return;
+      ctx.fillStyle = "#5c3a21"; // Brown Poop
+      ctx.fillRect(x - 4, y + 2, 8, 4);
+      ctx.fillRect(x - 2, y - 1, 4, 3);
+      ctx.fillRect(x - 1, y - 3, 2, 2);
+    }
+
+    // Render Tabby American Curl Cat (Dynamic Stretched Tail & Random Pooping)
     let tailAngle = 0;
     function drawAmericanCurlCat(x: number, y: number, deltaX: number, moving: boolean) {
       if (!ctx) return;
 
-      const isActuallyMoving = moving && Math.abs(deltaX) > 0.1;
+      const speedMagnitude = Math.abs(deltaX);
+      const isActuallyMoving = moving && speedMagnitude > 0.1;
+
+      // Random Poop Dropping Logic (0.8% chance per frame while moving)
+      if (isActuallyMoving && Math.random() < 0.008 && poops.length < 15) {
+        poops.push({ x: x, y: y + 8, size: 6 });
+      }
 
       // Draw Tail FIRST so it renders underneath / behind the body layer
       if (isActuallyMoving) {
         tailAngle += 0.25;
-        const tailWiggle = Math.sin(tailAngle) * 5;
+        const tailWiggle = Math.sin(tailAngle) * 6;
 
-        // Inertia offset: extends out behind motion direction
-        const dragOffset = Math.max(-16, Math.min(16, -deltaX * 2.5));
+        // Tail length extends significantly longer based on movement drag speed
+        const tailStretch = Math.min(speedMagnitude * 4, 35); 
+        const dragDirection = deltaX > 0 ? -1 : 1; 
 
         const tailBaseX = x;
         const tailBaseY = y + 2;
-        const controlX = tailBaseX + dragOffset * 0.8;
-        const controlY = tailBaseY - 8 + tailWiggle;
-        const tipX = tailBaseX + dragOffset * 1.4 + tailWiggle;
-        const tipY = tailBaseY - 14;
+        const controlX = tailBaseX + dragDirection * (12 + tailStretch * 0.6);
+        const controlY = tailBaseY - 10 + tailWiggle;
+        const tipX = tailBaseX + dragDirection * (18 + tailStretch) + tailWiggle;
+        const tipY = tailBaseY - 18;
 
         // Tail Base (White)
         ctx.strokeStyle = "#ffffff";
@@ -120,26 +137,26 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 10, y - 8, 20, 16); // Body
       ctx.fillRect(x - 8, y - 18, 16, 10); // Head
 
-      // DEFAULT HIDDEN TAIL (Curled over back when stationary)
+      // DEFAULT HIDDEN TAIL (Tucked on back when standing still)
       if (!isActuallyMoving) {
         ctx.fillStyle = "#78350f";
-        ctx.fillRect(x - 2, y - 12, 4, 5); // Tucked tail tip resting on back
+        ctx.fillRect(x - 2, y - 12, 4, 5); 
       }
 
       // Brown / Black Tabby Patches
-      ctx.fillStyle = "#78350f"; // Brown patch
+      ctx.fillStyle = "#78350f"; 
       ctx.fillRect(x - 4, y - 6, 8, 10);
       ctx.fillRect(x - 6, y - 18, 5, 5); 
 
-      ctx.fillStyle = "#1c1917"; // Black tabby stripe details
+      ctx.fillStyle = "#1c1917"; 
       ctx.fillRect(x - 2, y - 4, 4, 6);
       ctx.fillRect(x + 3, y - 8, 4, 8);
 
       // Backwards Curled Ears (American Curl feature)
-      ctx.fillStyle = "#fecdd3"; // Pink inner ear
+      ctx.fillStyle = "#fecdd3"; 
       ctx.fillRect(x - 10, y - 22, 4, 6);
       ctx.fillRect(x + 6, y - 22, 4, 6);
-      ctx.fillStyle = "#78350f"; // Outer curl tip
+      ctx.fillStyle = "#78350f"; 
       ctx.fillRect(x - 12, y - 24, 3, 4);
       ctx.fillRect(x + 9, y - 24, 3, 4);
 
@@ -182,6 +199,11 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       prevCatX = cat.x;
 
       ctx.clearRect(0, 0, width, height);
+
+      // Render dropped poops on ground
+      for (const p of poops) {
+        drawPoop(p.x, p.y);
+      }
 
       // Render entities
       drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 0.5 || isMoving);
