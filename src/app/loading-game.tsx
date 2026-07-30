@@ -65,7 +65,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillStyle = "#f5c6aa"; 
       ctx.fillRect(x - 10, y - 18, 20, 10);
 
-      // Dark Brown Hair with 60/40 Parting (Slightly asymmetrical left/right split)
+      // Dark Brown Hair with 60/40 Parting
       ctx.fillStyle = "#291d18"; 
       ctx.fillRect(x - 12, y - 28, 24, 8); // Top hair
       ctx.fillRect(x - 12, y - 22, 13, 6); // 60% side overhang (Left)
@@ -76,33 +76,48 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 10, y + 10, 20, 12);
     }
 
-    // Render White + Brown/Black Tabby American Curl Cat with Dynamic Tail
+    // Render White + Brown/Black Tabby American Curl Cat with Directional Tail & Yellow-Gold Eyes
     let tailAngle = 0;
-    function drawAmericanCurlCat(x: number, y: number, moving: boolean) {
+    function drawAmericanCurlCat(x: number, y: number, deltaX: number, moving: boolean) {
       if (!ctx) return;
 
-      // Animate tail sway speed based on movement
+      // Animate tail sway speed
       if (moving) {
         tailAngle += 0.25; 
       } else {
         tailAngle += 0.05; 
       }
-      const tailWiggle = Math.sin(tailAngle) * 8;
+      const tailWiggle = Math.sin(tailAngle) * 6;
 
-      // --- Animated Tail (White base, brown tip) ---
+      // Calculate direction lean based on movement delta (positive = right, negative = left)
+      // Clamped to avoid extreme stretching
+      const directionOffset = Math.max(-12, Math.min(12, deltaX * 1.5));
+
+      // --- Directional Tail (White base, brown tip) ---
+      // Base attachment at back of cat body
+      const tailBaseX = x - 10;
+      const tailBaseY = y + 4;
+      
+      // Control point and tip shift towards movement direction
+      const controlX = tailBaseX - 8 + directionOffset;
+      const controlY = tailBaseY - 10 + tailWiggle;
+      const tipX = tailBaseX - 12 + directionOffset * 1.2 + tailWiggle;
+      const tipY = tailBaseY - 18;
+
+      // Draw Tail Base (White)
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.moveTo(x - 10, y + 4);
-      ctx.quadraticCurveTo(x - 18, y - 5 + tailWiggle, x - 22 + tailWiggle, y - 12);
+      ctx.moveTo(tailBaseX, tailBaseY);
+      ctx.quadraticCurveTo(controlX, controlY, tipX, tipY);
       ctx.stroke();
 
-      // Brown Tail Tip
+      // Draw Tail Tip (Brown)
       ctx.strokeStyle = "#78350f";
       ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.moveTo(x - 18, y - 5 + tailWiggle);
-      ctx.lineTo(x - 22 + tailWiggle, y - 12);
+      ctx.moveTo(controlX, controlY);
+      ctx.lineTo(tipX, tipY);
       ctx.stroke();
 
       // White Body
@@ -119,7 +134,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 2, y - 4, 4, 6);
       ctx.fillRect(x + 3, y - 8, 4, 8);
 
-      // Backwards Curled Ears (American Curl feature!)
+      // Backwards Curled Ears (American Curl feature)
       ctx.fillStyle = "#fecdd3"; // Pink inner ear
       ctx.fillRect(x - 10, y - 22, 4, 6);
       ctx.fillRect(x + 6, y - 22, 4, 6);
@@ -127,8 +142,8 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 12, y - 24, 3, 4);
       ctx.fillRect(x + 9, y - 24, 3, 4);
 
-      // Eyes
-      ctx.fillStyle = "#15803d"; // Green cat eyes
+      // Yellow-Gold Eyes
+      ctx.fillStyle = "#eab308"; // Warm Yellow-Gold
       ctx.fillRect(x - 5, y - 14, 3, 3);
       ctx.fillRect(x + 2, y - 14, 3, 3);
     }
@@ -150,18 +165,25 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
 
     let animationId: number;
     let currentScore = 0;
+    let prevCatX = cat.x;
 
     function update() {
       if (!ctx) return;
       
       const speed = Math.abs(targetPos.x - boy.x);
       boy.x += (targetPos.x - boy.x) * 0.15;
-      cat.x += (boy.x - 45 - cat.x) * 0.08;
+      
+      const catTargetX = boy.x - 45;
+      cat.x += (catTargetX - cat.x) * 0.08;
+
+      // Calculate horizontal movement vector of the cat for directional tail lean
+      const deltaCatX = cat.x - prevCatX;
+      prevCatX = cat.x;
 
       ctx.clearRect(0, 0, width, height);
 
-      // Draw entities (Passes 'isMoving' to trigger fast tail wag)
-      drawAmericanCurlCat(cat.x, cat.y, speed > 1 || isMoving);
+      // Draw entities
+      drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 1 || isMoving);
       drawPixelBoy(boy.x, boy.y);
 
       for (let i = sourdoughs.length - 1; i >= 0; i--) {
