@@ -31,15 +31,38 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     let isMoving = false;
     let moveTimeout: NodeJS.Timeout;
 
-    const handlePointerMove = (e: PointerEvent) => {
-      targetPos.x = e.clientX;
+    const updatePosition = (clientX: number) => {
+      targetPos.x = clientX;
       isMoving = true;
       clearTimeout(moveTimeout);
       moveTimeout = setTimeout(() => {
         isMoving = false;
       }, 150);
     };
+
+    // Pointer event for desktop
+    const handlePointerMove = (e: PointerEvent) => {
+      updatePosition(e.clientX);
+    };
+
+    // Touch events with preventDefault to block mobile swipe-navigation & pull-to-refresh
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        e.preventDefault();
+        updatePosition(e.touches[0].clientX);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        e.preventDefault();
+        updatePosition(e.touches[0].clientX);
+      }
+    };
+
     window.addEventListener("pointermove", handlePointerMove);
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     const boy = { x: width / 2, y: height - 80, size: 36 };
     const cat = { x: width / 2 - 45, y: height - 70, size: 24 };
@@ -55,24 +78,20 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       });
     }, 1000);
 
-    // Render Boy (Beige skin & 60/40 Haircut)
+    // Render Boy
     function drawPixelBoy(x: number, y: number) {
       if (!ctx) return;
-      // Blue Shirt
       ctx.fillStyle = "#38bdf8"; 
       ctx.fillRect(x - 12, y - 10, 24, 20);
 
-      // Beige Skin
       ctx.fillStyle = "#f5c6aa"; 
       ctx.fillRect(x - 10, y - 18, 20, 10);
 
-      // Dark Brown Hair with 60/40 Parting
       ctx.fillStyle = "#291d18"; 
-      ctx.fillRect(x - 12, y - 28, 24, 8); // Top hair
-      ctx.fillRect(x - 12, y - 22, 13, 6); // 60% side overhang (Left)
-      ctx.fillRect(x + 3, y - 22, 9, 5);   // 40% side overhang (Right)
+      ctx.fillRect(x - 12, y - 28, 24, 8);
+      ctx.fillRect(x - 12, y - 22, 13, 6);
+      ctx.fillRect(x + 3, y - 22, 9, 5);
 
-      // Pants
       ctx.fillStyle = "#0284c7"; 
       ctx.fillRect(x - 10, y + 10, 20, 12);
     }
@@ -80,13 +99,13 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     // Render Cat Poop
     function drawPoop(x: number, y: number) {
       if (!ctx) return;
-      ctx.fillStyle = "#5c3a21"; // Brown Poop
+      ctx.fillStyle = "#5c3a21";
       ctx.fillRect(x - 4, y + 2, 8, 4);
       ctx.fillRect(x - 2, y - 1, 4, 3);
       ctx.fillRect(x - 1, y - 3, 2, 2);
     }
 
-    // Render Tabby American Curl Cat (Dynamic Stretched Tail & Random Pooping)
+    // Render Tabby American Curl Cat
     let tailAngle = 0;
     function drawAmericanCurlCat(x: number, y: number, deltaX: number, moving: boolean) {
       if (!ctx) return;
@@ -94,17 +113,14 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       const speedMagnitude = Math.abs(deltaX);
       const isActuallyMoving = moving && speedMagnitude > 0.1;
 
-      // Random Poop Dropping Logic (0.8% chance per frame while moving)
       if (isActuallyMoving && Math.random() < 0.008 && poops.length < 15) {
         poops.push({ x: x, y: y + 8, size: 6 });
       }
 
-      // Draw Tail FIRST so it renders underneath / behind the body layer
       if (isActuallyMoving) {
         tailAngle += 0.25;
         const tailWiggle = Math.sin(tailAngle) * 6;
 
-        // Tail length extends significantly longer based on movement drag speed
         const tailStretch = Math.min(speedMagnitude * 4, 35); 
         const dragDirection = deltaX > 0 ? -1 : 1; 
 
@@ -115,7 +131,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
         const tipX = tailBaseX + dragDirection * (18 + tailStretch) + tailWiggle;
         const tipY = tailBaseY - 18;
 
-        // Tail Base (White)
         ctx.strokeStyle = "#ffffff";
         ctx.lineWidth = 4;
         ctx.beginPath();
@@ -123,7 +138,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
         ctx.quadraticCurveTo(controlX, controlY, tipX, tipY);
         ctx.stroke();
 
-        // Tail Tip (Brown)
         ctx.strokeStyle = "#78350f";
         ctx.lineWidth = 4;
         ctx.beginPath();
@@ -132,18 +146,15 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
         ctx.stroke();
       }
 
-      // White Body
       ctx.fillStyle = "#ffffff"; 
-      ctx.fillRect(x - 10, y - 8, 20, 16); // Body
-      ctx.fillRect(x - 8, y - 18, 16, 10); // Head
+      ctx.fillRect(x - 10, y - 8, 20, 16);
+      ctx.fillRect(x - 8, y - 18, 16, 10);
 
-      // DEFAULT HIDDEN TAIL (Tucked on back when standing still)
       if (!isActuallyMoving) {
         ctx.fillStyle = "#78350f";
         ctx.fillRect(x - 2, y - 12, 4, 5); 
       }
 
-      // Brown / Black Tabby Patches
       ctx.fillStyle = "#78350f"; 
       ctx.fillRect(x - 4, y - 6, 8, 10);
       ctx.fillRect(x - 6, y - 18, 5, 5); 
@@ -152,7 +163,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 2, y - 4, 4, 6);
       ctx.fillRect(x + 3, y - 8, 4, 8);
 
-      // Backwards Curled Ears (American Curl feature)
       ctx.fillStyle = "#fecdd3"; 
       ctx.fillRect(x - 10, y - 22, 4, 6);
       ctx.fillRect(x + 6, y - 22, 4, 6);
@@ -160,7 +170,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 12, y - 24, 3, 4);
       ctx.fillRect(x + 9, y - 24, 3, 4);
 
-      // Yellow-Gold Eyes
       ctx.fillStyle = "#eab308"; 
       ctx.fillRect(x - 5, y - 14, 3, 3);
       ctx.fillRect(x + 2, y - 14, 3, 3);
@@ -194,18 +203,15 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       const catTargetX = boy.x - 45;
       cat.x += (catTargetX - cat.x) * 0.08;
 
-      // Delta movement vector of cat
       const deltaCatX = cat.x - prevCatX;
       prevCatX = cat.x;
 
       ctx.clearRect(0, 0, width, height);
 
-      // Render dropped poops on ground
       for (const p of poops) {
         drawPoop(p.x, p.y);
       }
 
-      // Render entities
       drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 0.5 || isMoving);
       drawPixelBoy(boy.x, boy.y);
 
@@ -237,26 +243,34 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
+      if (canvas) {
+        canvas.removeEventListener("touchstart", handleTouchStart);
+        canvas.removeEventListener("touchmove", handleTouchMove);
+      }
       clearInterval(spawnInterval);
       cancelAnimationFrame(animationId);
     };
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950 text-slate-100 flex flex-col items-center select-none overflow-hidden font-mono">
+    <div className="fixed inset-0 z-50 bg-slate-950 text-slate-100 flex flex-col items-center select-none overflow-hidden font-mono touch-none">
       <div className="absolute top-8 text-center space-y-2 z-10 pointer-events-none">
         <h1 className="text-2xl md:text-3xl font-extrabold text-emerald-400">
           Catch the Sourdough! 🥖
         </h1>
         <p className="text-xs md:text-sm text-slate-400">
-          Move your cursor or drag on mobile to catch 5 loaves to enter!
+          Move your finger or cursor to catch 5 loaves to enter!
         </p>
         <div className="inline-block bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-base md:text-lg">
           Caught: <span className="text-amber-400 font-bold">{score}</span> / {requiredScore}
         </div>
       </div>
 
-      <canvas ref={canvasRef} className="w-full h-full absolute inset-0 cursor-none" />
+      <canvas 
+        ref={canvasRef} 
+        className="w-full h-full absolute inset-0 cursor-none touch-none" 
+        style={{ touchAction: "none" }}
+      />
     </div>
   );
 }
