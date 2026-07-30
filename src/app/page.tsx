@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+import LoadingGame from "./loading-game";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-6 md:p-16 font-sans">
@@ -150,7 +155,7 @@ export default function Home() {
         <footer className="pt-8 border-t border-slate-800 flex justify-between items-center text-slate-400 text-xs font-mono">
           <div className="flex gap-6">
             <a href="https://github.com/yshunbin" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition">GitHub</a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/yshunbin/" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition">LinkedIn</a>
           </div>
           <span>yshunbin@gmail.com</span>
         </footer>
