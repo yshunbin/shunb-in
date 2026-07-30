@@ -76,53 +76,55 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 10, y + 10, 20, 12);
     }
 
-    // Render Tabby American Curl Cat with Natural Tail Lag (Opposite to movement)
+    // Render Tabby American Curl Cat (Tail hidden by default on back, extends out when moving)
     let tailAngle = 0;
     function drawAmericanCurlCat(x: number, y: number, deltaX: number, moving: boolean) {
       if (!ctx) return;
 
-      // Animate tail sway
-      if (moving) {
-        tailAngle += 0.25; 
-      } else {
-        tailAngle += 0.05; 
+      const isActuallyMoving = moving && Math.abs(deltaX) > 0.1;
+
+      // Draw Tail FIRST so it renders underneath / behind the body layer
+      if (isActuallyMoving) {
+        tailAngle += 0.25;
+        const tailWiggle = Math.sin(tailAngle) * 5;
+
+        // Inertia offset: extends out behind motion direction
+        const dragOffset = Math.max(-16, Math.min(16, -deltaX * 2.5));
+
+        const tailBaseX = x;
+        const tailBaseY = y + 2;
+        const controlX = tailBaseX + dragOffset * 0.8;
+        const controlY = tailBaseY - 8 + tailWiggle;
+        const tipX = tailBaseX + dragOffset * 1.4 + tailWiggle;
+        const tipY = tailBaseY - 14;
+
+        // Tail Base (White)
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(tailBaseX, tailBaseY);
+        ctx.quadraticCurveTo(controlX, controlY, tipX, tipY);
+        ctx.stroke();
+
+        // Tail Tip (Brown)
+        ctx.strokeStyle = "#78350f";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(controlX, controlY);
+        ctx.lineTo(tipX, tipY);
+        ctx.stroke();
       }
-      const tailWiggle = Math.sin(tailAngle) * 5;
-
-      // --- NATURAL INERTIA TAIL LOGIC ---
-      // Negative deltaX flips tail in OPPOSITE direction of movement drag
-      const dragOffset = Math.max(-14, Math.min(14, -deltaX * 2.2));
-
-      // Base attachment at back of cat body
-      const tailBaseX = x - 10;
-      const tailBaseY = y + 4;
-      
-      // Tail curves away from motion direction
-      const controlX = tailBaseX - 8 + dragOffset;
-      const controlY = tailBaseY - 10 + tailWiggle;
-      const tipX = tailBaseX - 12 + dragOffset * 1.3 + tailWiggle;
-      const tipY = tailBaseY - 18;
-
-      // Draw Tail Base (White)
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(tailBaseX, tailBaseY);
-      ctx.quadraticCurveTo(controlX, controlY, tipX, tipY);
-      ctx.stroke();
-
-      // Draw Tail Tip (Brown)
-      ctx.strokeStyle = "#78350f";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(controlX, controlY);
-      ctx.lineTo(tipX, tipY);
-      ctx.stroke();
 
       // White Body
       ctx.fillStyle = "#ffffff"; 
       ctx.fillRect(x - 10, y - 8, 20, 16); // Body
       ctx.fillRect(x - 8, y - 18, 16, 10); // Head
+
+      // DEFAULT HIDDEN TAIL (Curled over back when stationary)
+      if (!isActuallyMoving) {
+        ctx.fillStyle = "#78350f";
+        ctx.fillRect(x - 2, y - 12, 4, 5); // Tucked tail tip resting on back
+      }
 
       // Brown / Black Tabby Patches
       ctx.fillStyle = "#78350f"; // Brown patch
@@ -175,14 +177,14 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       const catTargetX = boy.x - 45;
       cat.x += (catTargetX - cat.x) * 0.08;
 
-      // Movement vector of cat
+      // Delta movement vector of cat
       const deltaCatX = cat.x - prevCatX;
       prevCatX = cat.x;
 
       ctx.clearRect(0, 0, width, height);
 
       // Render entities
-      drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 1 || isMoving);
+      drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 0.5 || isMoving);
       drawPixelBoy(boy.x, boy.y);
 
       for (let i = sourdoughs.length - 1; i >= 0; i--) {
