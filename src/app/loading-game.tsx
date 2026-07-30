@@ -253,7 +253,10 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950 text-slate-100 flex flex-col items-center select-none overflow-hidden font-mono touch-none">
+    <div 
+    className="fixed inset-0 z-50 bg-slate-950 text-slate-100 flex flex-col items-center select-none overflow-hidden touch-none overscroll-none"
+    style={{ touchAction: "none", position: "fixed", width: "100vw", height: "100vh" }}
+    >
       <div className="absolute top-8 text-center space-y-2 z-10 pointer-events-none">
         <h1 className="text-2xl md:text-3xl font-extrabold text-emerald-400">
           Catch the Sourdough! 🥖
