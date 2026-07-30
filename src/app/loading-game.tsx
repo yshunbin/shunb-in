@@ -11,6 +11,33 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
   const [score, setScore] = useState(0);
   const requiredScore = 5;
 
+  // --- MOBILE UI/UX FIX ---
+  // Lock body scrolling when game mounts, unlock when it unmounts.
+  useEffect(() => {
+    // 1. Store original body overflow style
+    const originalOverflow = document.body.style.overflow;
+    
+    // 2. Apply strict scroll locking to body
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+
+    // 3. Prevent standard touchmove behavior across the window (ios safari bounce/scroll CHAINING)
+    const preventScroll = (e: TouchEvent) => {
+      // Passive: false is crucial in laymen's terms for preventDefault() to work on touch
+      e.preventDefault();
+    };
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+
+    // --- Cleanup function ---
+    return () => {
+      // 4. Restore original styles
+      document.body.style.overflow = originalOverflow;
+      document.body.style.touchAction = "auto";
+      window.removeEventListener("touchmove", preventScroll);
+    };
+  }, []);
+
+  // --- EXISTING GAME LOGIC ---
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -45,24 +72,22 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       updatePosition(e.clientX);
     };
 
-    // Touch events with preventDefault to block mobile swipe-navigation & pull-to-refresh
+    // Touch events for mobile
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length > 0) {
-        e.preventDefault();
         updatePosition(e.touches[0].clientX);
       }
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
-        e.preventDefault();
         updatePosition(e.touches[0].clientX);
       }
     };
 
     window.addEventListener("pointermove", handlePointerMove);
-    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
-    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchstart", handleTouchStart);
+    canvas.addEventListener("touchmove", handleTouchMove);
 
     const boy = { x: width / 2, y: height - 80, size: 36 };
     const cat = { x: width / 2 - 45, y: height - 70, size: 24 };
@@ -78,7 +103,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       });
     }, 1000);
 
-    // Render Boy
+    // --- Drawing Functions (Pixel Art) ---
     function drawPixelBoy(x: number, y: number) {
       if (!ctx) return;
       ctx.fillStyle = "#38bdf8"; 
@@ -96,7 +121,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 10, y + 10, 20, 12);
     }
 
-    // Render Cat Poop
     function drawPoop(x: number, y: number) {
       if (!ctx) return;
       ctx.fillStyle = "#5c3a21";
@@ -105,7 +129,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 1, y - 3, 2, 2);
     }
 
-    // Render Tabby American Curl Cat
     let tailAngle = 0;
     function drawAmericanCurlCat(x: number, y: number, deltaX: number, moving: boolean) {
       if (!ctx) return;
@@ -120,7 +143,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       if (isActuallyMoving) {
         tailAngle += 0.25;
         const tailWiggle = Math.sin(tailAngle) * 6;
-
         const tailStretch = Math.min(speedMagnitude * 4, 35); 
         const dragDirection = deltaX > 0 ? -1 : 1; 
 
@@ -190,6 +212,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.stroke();
     }
 
+    // --- Main Loop ---
     let animationId: number;
     let currentScore = 0;
     let prevCatX = cat.x;
@@ -253,9 +276,16 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
   }, [onComplete]);
 
   return (
+    // 1. Root container (Strict locking and preventing page bounce/scroll Chaining)
     <div 
-    className="fixed inset-0 z-50 bg-slate-950 text-slate-100 flex flex-col items-center select-none overflow-hidden touch-none overscroll-none"
-    style={{ touchAction: "none", position: "fixed", width: "100vw", height: "100vh" }}
+      className="fixed inset-0 z-50 bg-slate-950 text-slate-100 flex flex-col items-center overflow-hidden font-mono overscroll-none select-none touch-none"
+      style={{
+        width: "100vw",
+        height: "100vh",
+        position: "fixed",
+        touchAction: "none",
+        overscrollBehavior: "none",
+      }}
     >
       <div className="absolute top-8 text-center space-y-2 z-10 pointer-events-none">
         <h1 className="text-2xl md:text-3xl font-extrabold text-emerald-400">
@@ -269,10 +299,11 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
         </div>
       </div>
 
+      {/* 2. Canvas for drawing */}
       <canvas 
         ref={canvasRef} 
-        className="w-full h-full absolute inset-0 cursor-none touch-none" 
-        style={{ touchAction: "none" }}
+        className="w-full h-full absolute inset-0 cursor-none touch-none overscroll-none" 
+        style={{ touchAction: "none", overscrollBehavior: "none" }}
       />
     </div>
   );
