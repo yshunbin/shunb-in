@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { FastForward } from "lucide-react";
 
 interface LoadingGameProps {
   onComplete: () => void;
@@ -17,15 +18,9 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     document.body.style.overflow = "hidden";
     document.body.style.touchAction = "none";
 
-    const preventScroll = (e: TouchEvent) => {
-      e.preventDefault();
-    };
-    window.addEventListener("touchmove", preventScroll, { passive: false });
-
     return () => {
       document.body.style.overflow = originalOverflow;
       document.body.style.touchAction = "auto";
-      window.removeEventListener("touchmove", preventScroll);
     };
   }, []);
 
@@ -82,7 +77,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     const boy = { x: width / 2, y: height - 80, size: 36 };
     const cat = { x: width / 2 - 45, y: height - 70, size: 24 };
     const sourdoughs: Array<{ x: number; y: number; speed: number; size: number }> = [];
-    const poops: Array<{ x: number; y: number; size: number }> = [];
 
     const spawnInterval = setInterval(() => {
       sourdoughs.push({
@@ -110,80 +104,13 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 10, y + 10, 20, 12);
     }
 
-    function drawPoop(x: number, y: number) {
+    function drawAmericanCurlCat(x: number, y: number) {
       if (!ctx) return;
-      ctx.fillStyle = "#5c3a21";
-      ctx.fillRect(x - 4, y + 2, 8, 4);
-      ctx.fillRect(x - 2, y - 1, 4, 3);
-      ctx.fillRect(x - 1, y - 3, 2, 2);
-    }
-
-    let tailAngle = 0;
-    function drawAmericanCurlCat(x: number, y: number, deltaX: number, moving: boolean) {
-      if (!ctx) return;
-
-      const speedMagnitude = Math.abs(deltaX);
-      const isActuallyMoving = moving && speedMagnitude > 0.1;
-
-      if (isActuallyMoving && Math.random() < 0.008 && poops.length < 15) {
-        poops.push({ x: x, y: y + 8, size: 6 });
-      }
-
-      if (isActuallyMoving) {
-        tailAngle += 0.25;
-        const tailWiggle = Math.sin(tailAngle) * 6;
-        const tailStretch = Math.min(speedMagnitude * 4, 35); 
-        const dragDirection = deltaX > 0 ? -1 : 1; 
-
-        const tailBaseX = x;
-        const tailBaseY = y + 2;
-        const controlX = tailBaseX + dragDirection * (12 + tailStretch * 0.6);
-        const controlY = tailBaseY - 10 + tailWiggle;
-        const tipX = tailBaseX + dragDirection * (18 + tailStretch) + tailWiggle;
-        const tipY = tailBaseY - 18;
-
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(tailBaseX, tailBaseY);
-        ctx.quadraticCurveTo(controlX, controlY, tipX, tipY);
-        ctx.stroke();
-
-        ctx.strokeStyle = "#78350f";
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(controlX, controlY);
-        ctx.lineTo(tipX, tipY);
-        ctx.stroke();
-      }
-
       ctx.fillStyle = "#ffffff"; 
       ctx.fillRect(x - 10, y - 8, 20, 16);
       ctx.fillRect(x - 8, y - 18, 16, 10);
-
-      if (!isActuallyMoving) {
-        ctx.fillStyle = "#78350f";
-        ctx.fillRect(x - 2, y - 12, 4, 5); 
-      }
-
       ctx.fillStyle = "#78350f"; 
       ctx.fillRect(x - 4, y - 6, 8, 10);
-      ctx.fillRect(x - 6, y - 18, 5, 5); 
-
-      ctx.fillStyle = "#1c1917"; 
-      ctx.fillRect(x - 2, y - 4, 4, 6);
-      ctx.fillRect(x + 3, y - 8, 4, 8);
-
-      ctx.fillStyle = "#fecdd3"; 
-      ctx.fillRect(x - 10, y - 22, 4, 6);
-      ctx.fillRect(x + 6, y - 22, 4, 6);
-      ctx.fillStyle = "#78350f"; 
-      ctx.fillRect(x - 12, y - 24, 3, 4);
-      ctx.fillRect(x + 9, y - 24, 3, 4);
-
-      ctx.fillStyle = "#eab308"; 
-      ctx.fillRect(x - 5, y - 14, 3, 3);
-      ctx.fillRect(x + 2, y - 14, 3, 3);
     }
 
     function drawSourdough(x: number, y: number, size: number) {
@@ -203,27 +130,16 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
 
     let animationId: number;
     let currentScore = 0;
-    let prevCatX = cat.x;
 
     function update() {
       if (!ctx) return;
       
-      const speed = Math.abs(targetPos.x - boy.x);
       boy.x += (targetPos.x - boy.x) * 0.15;
-      
-      const catTargetX = boy.x - 45;
-      cat.x += (catTargetX - cat.x) * 0.08;
-
-      const deltaCatX = cat.x - prevCatX;
-      prevCatX = cat.x;
+      cat.x += (boy.x - 45 - cat.x) * 0.08;
 
       ctx.clearRect(0, 0, width, height);
 
-      for (const p of poops) {
-        drawPoop(p.x, p.y);
-      }
-
-      drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 0.5 || isMoving);
+      drawAmericanCurlCat(cat.x, cat.y);
       drawPixelBoy(boy.x, boy.y);
 
       for (let i = sourdoughs.length - 1; i >= 0; i--) {
@@ -238,7 +154,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
           setScore(currentScore);
 
           if (currentScore >= requiredScore) {
-            setTimeout(onComplete, 800);
+            setTimeout(onComplete, 500);
             return;
           }
         } else if (s.y > height + 20) {
@@ -266,32 +182,32 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
   return (
     <div 
       className="fixed inset-0 z-[9999] bg-slate-950 text-slate-100 flex flex-col items-center overflow-hidden font-mono select-none touch-none h-[100dvh] w-screen"
-      style={{
-        width: "100vw",
-        height: "100dvh",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        touchAction: "none",
-        overscrollBehavior: "none",
-      }}
+      style={{ touchAction: "none" }}
     >
-      <div className="absolute top-8 text-center space-y-2 z-10 pointer-events-none">
-        <h1 className="text-2xl md:text-3xl font-extrabold text-emerald-400">
-          Catch the Sourdough! 🥖
-        </h1>
-        <p className="text-xs md:text-sm text-slate-400">
-          Move your finger or cursor to catch 5 loaves to enter!
-        </p>
-        <div className="inline-block bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-base md:text-lg">
-          Caught: <span className="text-amber-400 font-bold">{score}</span> / {requiredScore}
+      {/* Top Header Controls */}
+      <div className="absolute top-6 left-0 right-0 px-6 flex items-center justify-between z-20 pointer-events-auto">
+        <div className="text-left space-y-1">
+          <h1 className="text-xl md:text-2xl font-extrabold text-emerald-400">
+            Catch the Sourdough! 🥖
+          </h1>
+          <div className="text-xs text-amber-400 font-bold">
+            Caught: {score} / {requiredScore}
+          </div>
         </div>
+
+        {/* Skip Game Button */}
+        <button
+          onClick={onComplete}
+          className="flex items-center space-x-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 px-3.5 py-2 rounded-xl text-xs font-sans font-semibold backdrop-blur-md transition shadow-lg active:scale-95"
+        >
+          <span>Skip Game</span>
+          <FastForward className="w-3.5 h-3.5 text-emerald-400" />
+        </button>
       </div>
 
       <canvas 
         ref={canvasRef} 
         className="w-full h-full absolute inset-0 cursor-none touch-none" 
-        style={{ touchAction: "none", overscrollBehavior: "none" }}
       />
     </div>
   );
