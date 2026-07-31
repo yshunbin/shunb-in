@@ -12,7 +12,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
   const [score, setScore] = useState(0);
   const requiredScore = 5;
 
-  // Lock body scroll while mounted
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -24,7 +23,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     };
   }, []);
 
-  // Canvas Game Engine
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -42,16 +40,9 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
     window.addEventListener("resize", handleResize);
 
     const targetPos = { x: width / 2 };
-    let isMoving = false;
-    let moveTimeout: NodeJS.Timeout;
 
     const updatePosition = (clientX: number) => {
       targetPos.x = clientX;
-      isMoving = true;
-      clearTimeout(moveTimeout);
-      moveTimeout = setTimeout(() => {
-        isMoving = false;
-      }, 150);
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -154,7 +145,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
           setScore(currentScore);
 
           if (currentScore >= requiredScore) {
-            setTimeout(onComplete, 500);
+            setTimeout(onComplete, 400);
             return;
           }
         } else if (s.y > height + 20) {
@@ -184,21 +175,25 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       className="fixed inset-0 z-[9999] bg-slate-950 text-slate-100 flex flex-col items-center overflow-hidden font-mono select-none touch-none h-[100dvh] w-screen"
       style={{ touchAction: "none" }}
     >
-      {/* Top Header Controls */}
-      <div className="absolute top-6 left-0 right-0 px-6 flex items-center justify-between z-20 pointer-events-auto">
-        <div className="text-left space-y-1">
-          <h1 className="text-xl md:text-2xl font-extrabold text-emerald-400">
+      {/* Absolute Header Layout for Centered Text & Right-aligned Skip Button */}
+      <div className="absolute top-6 inset-x-0 px-6 flex items-center justify-between z-20 pointer-events-auto">
+        {/* Empty left placeholder to perfectly balance the right button */}
+        <div className="w-24 hidden sm:block"></div>
+
+        {/* Centered Game Title & Score */}
+        <div className="text-center space-y-1 mx-auto">
+          <h1 className="text-xl md:text-2xl font-extrabold text-amber-400 tracking-wide font-mono">
             Catch the Sourdough! 🥖
           </h1>
-          <div className="text-xs text-amber-400 font-bold">
+          <div className="text-xs text-slate-300 font-bold font-mono">
             Caught: {score} / {requiredScore}
           </div>
         </div>
 
-        {/* Skip Game Button */}
+        {/* Right-Aligned Skip Button */}
         <button
           onClick={onComplete}
-          className="flex items-center space-x-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 px-3.5 py-2 rounded-xl text-xs font-sans font-semibold backdrop-blur-md transition shadow-lg active:scale-95"
+          className="flex items-center space-x-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 px-3.5 py-2 rounded-xl text-xs font-sans font-semibold backdrop-blur-md transition shadow-lg active:scale-95 shrink-0"
         >
           <span>Skip Game</span>
           <FastForward className="w-3.5 h-3.5 text-emerald-400" />
