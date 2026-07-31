@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import LoadingGame from "./loading-game";
+import Link from "next/link";
+import { Zap, ExternalLink } from "lucide-react";
 
 export default function Home() {
   const [hasEntered, setHasEntered] = useState(false);
@@ -174,5 +176,36 @@ export default function Home() {
         </div>
       </main>
     </>
+  );
+}
+
+export function ProjectCard() {
+  return (
+    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition">
+      <div className="flex justify-between items-start mb-4">
+        <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400">
+          <Zap className="w-6 h-6" />
+        </div>
+        <Link
+          href="/projects/discipher"
+          className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800"
+        >
+          <span>Try App</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
+      <h3 className="text-xl font-bold text-slate-100 mb-2">DISC-Ciphere</h3>
+      <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+        A mobile-friendly outreach assistant for financial planning agents. Uses the DISC behavioral model and local Singapore context to generate high-conversion appointment hooks with instant 1-click WhatsApp linking and dynamic QR codes.
+      </p>
+
+      <div className="flex flex-wrap gap-2 text-xs font-mono text-slate-400">
+        <span className="bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">Next.js</span>
+        <span className="bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">Tailwind CSS</span>
+        <span className="bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">WhatsApp Web API</span>
+        <span className="bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">DISC Framework</span>
+      </div>
+    </div>
   );
 }
