@@ -104,7 +104,7 @@ export default function Home() {
                 <p className="text-xs text-emerald-400 font-mono">Software Engineer</p>
                 <ul className="list-disc list-inside text-xs text-slate-300 space-y-1 pt-1 leading-relaxed">
                   <li>Developed server monitoring tools using Java 17, Spring Boot, and SQLite, leveraging PowerShell probes to automate software asset changes[cite: 1].</li>
-                  <li>Trained AI agents and Dataiku dashboards to analyze complex data trends and automate policy comparisons for compliance stakeholders[cite: 1].</li>
+                  <li>Trained AI agents and Dataiku dashboards to analyze complex data trends and automate policy comparisons for compliance stakeholders.</li>
                 </ul>
               </div>
 
@@ -117,8 +117,8 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-slate-400 font-mono">Software Engineer / Intern</p>
                 <ul className="list-disc list-inside text-xs text-slate-300 space-y-1 pt-1 leading-relaxed">
-                  <li>Developed real-time network automation scripts for Aruba (AOS-CX) utilizing SNMP, CLI, and API calls[cite: 1].</li>
-                  <li>Automated unit testing frameworks in pre-prod environments to evaluate network performance and minimize operational support tasks[cite: 1].</li>
+                  <li>Developed real-time network automation scripts for Aruba (AOS-CX) utilizing SNMP, CLI, and API calls.</li>
+                  <li>Automated unit testing frameworks in pre-prod environments to evaluate network performance and minimize operational support tasks.</li>
                 </ul>
               </div>
 

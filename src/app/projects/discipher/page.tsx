@@ -136,7 +136,7 @@ export default function FAChatPage() {
           <div>
             <div className="flex items-center space-x-2 text-emerald-400 text-sm font-semibold tracking-wide uppercase mb-1">
               <Zap className="w-4 h-4" />
-              <span>DISC-Ciphere Engine</span>
+              <span>DISCipher Engine</span>
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight">FA Cold-to-Appointment Assistant</h1>
             <p className="text-slate-400 text-sm mt-1">
