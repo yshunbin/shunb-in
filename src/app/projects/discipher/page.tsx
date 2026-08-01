@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import { 
   MessageSquare, 
@@ -77,43 +78,43 @@ export default function FAChatPage() {
   const [selectedMessage, setSelectedMessage] = useState<string>("");
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [showQR, setShowQR] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // DISC Message Generation Logic
-  const handleGenerate = () => {
-    const name = clientName.trim() || "there";
-    const tonePrefix = useLocalTone ? "Hey " : "Hi ";
+  // DISC Message Generation Logic via Gemini API
+  const handleGenerate = async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
 
-    let msgs: string[] = [];
+    try {
+      const response = await fetch("/api/discipher", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clientName: clientName.trim(),
+          discType,
+          painPoint,
+          useLocalTone,
+        }),
+      });
 
-    if (discType === "D") {
-      msgs = [
-        `${tonePrefix}${name}, noticed a quick gap in your ${painPoint.toLowerCase()} strategy. I’ve cut down a 15-min breakdown on how to fix this—no fluff. Free for a quick 10-min call this Thursday or Friday?`,
-        `${name}, bottom line: most folks overlook ${painPoint.toLowerCase()} until it costs them extra. Got 2 streamlined options to review. Let me know if Tue or Wed afternoon works better to glance through.`,
-        `${tonePrefix}${name}, checking in directly on your ${painPoint.toLowerCase()} setup. If you want to streamline this efficiently, let’s sync up briefly this week.`
-      ];
-    } else if (discType === "I") {
-      msgs = [
-        `${tonePrefix}${name}! Hope you're having an awesome week! Was chatting with a few friends about ${painPoint.toLowerCase()} and thought of you. Would love to grab a quick coffee/catchup soon and share some cool insights! ☕`,
-        `Hey ${name}! Long time! Was looking into some really interesting trends regarding ${painPoint.toLowerCase()} that make a huge difference for lifestyle planning. Let's catch up over coffee this week!`,
-        `${tonePrefix}${name}, hope all is well! Got some fresh updates on ${painPoint.toLowerCase()} that I think you'll really appreciate. Let's hang out briefly sometime this week!`
-      ];
-    } else if (discType === "S") {
-      msgs = [
-        `${tonePrefix}${name}, hope you're having a smooth week. No rush at all, but I’ve been reviewing some safe step-by-step approaches for ${painPoint.toLowerCase()} to ensure your family is fully covered. Happy to share whenever you have a quiet moment.`,
-        `Hi ${name}, just a gentle check-in. Many clients tell me ${painPoint.toLowerCase()} can feel overwhelming, so I put together a low-pressure, step-by-step summary. Let me know if you'd like me to drop it over!`,
-        `${tonePrefix}${name}, hope things are peaceful on your side. Whenever you're free, I’d love to share a non-obligatory guide on securing your ${painPoint.toLowerCase()}. No rush!`
-      ];
-    } else { // C Type
-      msgs = [
-        `${tonePrefix}${name}, I’ve put together a structured analysis regarding ${painPoint.toLowerCase()}, comparing current market rates and policy benchmarks. I can drop over the data comparison for your review. Let me know if Thursday works.`,
-        `Hi ${name}, following up with some quantitative insights on ${painPoint.toLowerCase()}. I have a clear breakdown detailing potential yield and risk buffers. Let me know if you'd like the figures sent over.`,
-        `${tonePrefix}${name}, hope week is going well. I have compiled a factual review addressing key inefficiencies in ${painPoint.toLowerCase()}. Happy to share the logic and numbers whenever convenient.`
-      ];
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate messages.");
+      }
+
+      setGeneratedMessages(data.messages);
+      setSelectedMessage(data.messages[0]);
+      setCopiedIndex(null);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setErrorMessage(msg);
+    } finally {
+      setIsLoading(false);
     }
-
-    setGeneratedMessages(msgs);
-    setSelectedMessage(msgs[0]);
-    setCopiedIndex(null);
   };
 
   // Format WhatsApp URL
@@ -129,7 +130,11 @@ export default function FAChatPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8 font-sans">
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="max-w-5xl mx-auto space-y-6">
+        
+        <Link href="/projects" className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-emerald-400 transition">
+          <span>← Back to Projects</span>
+        </Link>
         
         {/* Header Section */}
         <header className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -256,11 +261,23 @@ export default function FAChatPage() {
             {/* Action Button */}
             <button
               onClick={handleGenerate}
-              className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl shadow-lg shadow-emerald-500/10 transition flex items-center justify-center space-x-2"
+              disabled={isLoading}
+              className={`w-full font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 ${
+                isLoading 
+                  ? "bg-emerald-500/50 text-slate-950 cursor-not-allowed" 
+                  : "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/10"
+              }`}
             >
-              <RefreshCw className="w-4 h-4" />
-              <span>Generate Tailored Messages</span>
+              <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
+              <span>{isLoading ? "Generating with Gemini AI..." : "Generate Tailored Messages"}</span>
             </button>
+
+            {errorMessage && (
+              <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400 space-y-1">
+                <div className="font-semibold">Generation Error</div>
+                <div>{errorMessage}</div>
+              </div>
+            )}
 
           </div>
 

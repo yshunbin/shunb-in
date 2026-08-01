@@ -25,17 +25,26 @@ export default function Home() {
               <h1 className="text-4xl font-extrabold tracking-tight text-white">Shun Bin Yeoh</h1>
               <p className="text-lg text-emerald-400 font-mono mt-1">Software Engineer | Java & Distributed Systems</p>
             </div>
-            <a 
-              href="/resume.pdf" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded transition text-sm"
-            >
-              <span>Download Resume (PDF)</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-              </svg>
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded transition text-sm border border-slate-700"
+              >
+                <span>Projects</span>
+                <Zap className="w-4 h-4 text-emerald-400" />
+              </Link>
+              <a 
+                href="/resume.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded transition text-sm"
+              >
+                <span>Download Resume (PDF)</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+              </a>
+            </div>
           </header>
 
           {/* Core Technical Skills */}
@@ -85,6 +94,17 @@ export default function Home() {
                 </div>
               </div>
 
+            </div>
+            <div className="pt-4">
+              <Link 
+                href="/projects" 
+                className="group inline-flex items-center gap-2 text-sm font-mono text-emerald-400 hover:text-emerald-300 transition"
+              >
+                <span>Projects</span>
+                <span className="text-slate-600 group-hover:text-slate-400">&gt;</span>
+                <span>DISCipher</span>
+                <ExternalLink className="w-4 h-4 ml-1 opacity-50 group-hover:opacity-100 transition" />
+              </Link>
             </div>
           </section>
 
@@ -195,7 +215,9 @@ export function ProjectCard() {
         </Link>
       </div>
 
-      <h3 className="text-xl font-bold text-slate-100 mb-2">DISC-Ciphere</h3>
+      <Link href="/projects/discipher">
+        <h3 className="text-xl font-bold text-slate-100 mb-2 hover:text-emerald-400 transition">DISCipher</h3>
+      </Link>
       <p className="text-sm text-slate-400 mb-4 leading-relaxed">
         A mobile-friendly outreach assistant for financial planning agents. Uses the DISC behavioral model and local Singapore context to generate high-conversion appointment hooks with instant 1-click WhatsApp linking and dynamic QR codes.
       </p>
