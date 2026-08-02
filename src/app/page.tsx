@@ -21,9 +21,17 @@ export default function Home() {
           
           {/* Header */}
           <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-8">
-            <div>
+            <div className="space-y-2">
               <h1 className="text-4xl font-extrabold tracking-tight text-white">Shun Bin Yeoh</h1>
-              <p className="text-lg text-emerald-400 font-mono mt-1">Software Engineer | Java & Distributed Systems</p>
+              <p className="text-lg text-emerald-400 font-mono">Software Engineer | Java & Distributed Systems</p>
+              <div className="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1 rounded text-xs font-mono text-slate-300">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <img 
+                  src="https://komarev.com/ghpvc/?username=yshunbin&color=059669&style=flat-square&label=PROFILE%20VIEWS" 
+                  alt="Visitor Count" 
+                  className="inline-block h-4"
+                />
+              </div>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link
