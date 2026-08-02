@@ -6,13 +6,23 @@ import Link from "next/link";
 import { Zap, ExternalLink } from "lucide-react";
 
 export default function Home() {
-  const [hasEntered, setHasEntered] = useState(false);
+  const [hasEntered, setHasEntered] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("sourdough_played") === "true";
+    }
+    return true;
+  });
+
+  const handleComplete = () => {
+    sessionStorage.setItem("sourdough_played", "true");
+    setHasEntered(true);
+  };
 
   return (
     <>
       {/* Minigame overlay (shows until 5 sourdoughs are caught) */}
       {!hasEntered && (
-        <LoadingGame onComplete={() => setHasEntered(true)} />
+        <LoadingGame onComplete={handleComplete} />
       )}
 
       {/* Main Portfolio Webpage */}
@@ -24,14 +34,6 @@ export default function Home() {
             <div className="space-y-2">
               <h1 className="text-4xl font-extrabold tracking-tight text-white">Shun Bin Yeoh</h1>
               <p className="text-lg text-emerald-400 font-mono">Software Engineer | Java & Distributed Systems</p>
-              <div className="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1 rounded text-xs font-mono text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <img 
-                  src="https://komarev.com/ghpvc/?username=yshunbin&color=059669&style=flat-square&label=PROFILE%20VIEWS" 
-                  alt="Visitor Count" 
-                  className="inline-block h-4"
-                />
-              </div>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -102,17 +104,6 @@ export default function Home() {
                 </div>
               </div>
 
-            </div>
-            <div className="pt-4">
-              <Link 
-                href="/projects" 
-                className="group inline-flex items-center gap-2 text-sm font-mono text-emerald-400 hover:text-emerald-300 transition"
-              >
-                <span>Projects</span>
-                <span className="text-slate-600 group-hover:text-slate-400">&gt;</span>
-                <span>DISCipher</span>
-                <ExternalLink className="w-4 h-4 ml-1 opacity-50 group-hover:opacity-100 transition" />
-              </Link>
             </div>
           </section>
 
