@@ -34,6 +34,9 @@ export default function Home() {
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Java</span>
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Distributed Systems</span>
               </div>
+              <p className="text-base md:text-lg text-ink font-medium tracking-tight">
+                Codes by day · Journals by night · Bakes for the gut
+              </p>
               <p className="text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed text-pretty">
                 I build reliable backend systems — from monitoring tools and automation to
                 cloud infrastructure — with a focus on clarity, scale, and craft.
@@ -83,7 +86,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-2xl md:text-3xl font-semibold tracking-tight text-ink">∞</p>
-                <p className="text-xs text-ink-soft mt-1">Still learning</p>
+                <p className="text-xs text-ink-soft mt-1">Ever learning</p>
               </div>
             </div>
           </header>
@@ -325,7 +328,7 @@ export function ProjectCard() {
   return (
     <article className="diary-card p-6 space-y-4">
       <div className="flex justify-between items-start">
-        <p className="diary-label">Featured</p>
+        <p className="diary-label">AI Tool</p>
         <Link
           href="/projects/discipher"
           transitionTypes={["nav-forward"]}
