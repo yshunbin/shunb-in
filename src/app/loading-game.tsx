@@ -7,6 +7,20 @@ interface LoadingGameProps {
   onComplete: () => void;
 }
 
+type FallingKind = "sourdough" | "toy";
+type ToyVariant = "yarn" | "mouse" | "bell" | "feather";
+
+type FallingItem = {
+  x: number;
+  y: number;
+  speed: number;
+  size: number;
+  kind: FallingKind;
+  toy?: ToyVariant;
+};
+
+const TOY_VARIANTS: ToyVariant[] = ["yarn", "mouse", "bell", "feather"];
+
 export default function LoadingGame({ onComplete }: LoadingGameProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [score, setScore] = useState(0);
@@ -71,7 +85,7 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
 
     const boy = { x: width / 2, y: grassTop - 18, size: 36 };
     const cat = { x: width / 2 - 45, y: grassTop - 8, size: 24 };
-    const sourdoughs: Array<{ x: number; y: number; speed: number; size: number }> = [];
+    const items: FallingItem[] = [];
 
     const clouds = Array.from({ length: 6 }, (_, i) => ({
       x: (width / 6) * i + Math.random() * 80,
@@ -80,14 +94,22 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       scale: 0.7 + Math.random() * 0.8,
     }));
 
-    const spawnInterval = setInterval(() => {
-      sourdoughs.push({
+    const spawnItem = () => {
+      const isToy = Math.random() < 0.42;
+      items.push({
         x: Math.random() * (width - 40) + 20,
         y: -30,
-        speed: 2.5 + Math.random() * 3,
-        size: 28,
+        speed: 2.4 + Math.random() * 3.2,
+        size: isToy ? 24 : 28,
+        kind: isToy ? "toy" : "sourdough",
+        toy: isToy
+          ? TOY_VARIANTS[Math.floor(Math.random() * TOY_VARIANTS.length)]
+          : undefined,
       });
-    }, 1000);
+    };
+
+    const spawnInterval = setInterval(spawnItem, 850);
+    spawnItem();
 
     function drawBackground() {
       if (!ctx) return;
@@ -162,7 +184,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       const speedMagnitude = Math.abs(deltaX);
       const isActuallyMoving = moving && speedMagnitude > 0.1;
 
-      // Wiggly / drag tail (drawn behind body)
       if (isActuallyMoving) {
         tailAngle += 0.25;
         const tailWiggle = Math.sin(tailAngle) * 6;
@@ -190,7 +211,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
         ctx.lineTo(tipX, tipY);
         ctx.stroke();
       } else {
-        // Gentle idle wiggle when standing still
         tailAngle += 0.06;
         const idleWiggle = Math.sin(tailAngle) * 4;
         ctx.strokeStyle = "#ffffff";
@@ -207,23 +227,19 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
         ctx.stroke();
       }
 
-      // White body + head
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(x - 10, y - 8, 20, 16);
       ctx.fillRect(x - 8, y - 18, 16, 10);
 
-      // Brown patches
       ctx.fillStyle = "#78350f";
       ctx.fillRect(x - 4, y - 6, 8, 10);
       ctx.fillRect(x - 6, y - 18, 5, 5);
 
-      // Grey patches
       ctx.fillStyle = "#78716c";
       ctx.fillRect(x - 2, y - 4, 4, 6);
       ctx.fillRect(x + 3, y - 8, 4, 8);
       ctx.fillRect(x + 2, y - 16, 4, 4);
 
-      // American Curl ears
       ctx.fillStyle = "#fecdd3";
       ctx.fillRect(x - 10, y - 22, 4, 6);
       ctx.fillRect(x + 6, y - 22, 4, 6);
@@ -231,7 +247,6 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.fillRect(x - 12, y - 24, 3, 4);
       ctx.fillRect(x + 9, y - 24, 3, 4);
 
-      // Eyes
       ctx.fillStyle = "#eab308";
       ctx.fillRect(x - 5, y - 14, 3, 3);
       ctx.fillRect(x + 2, y - 14, 3, 3);
@@ -252,9 +267,85 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
       ctx.stroke();
     }
 
+    function drawCatToy(x: number, y: number, size: number, variant: ToyVariant = "yarn") {
+      if (!ctx) return;
+
+      if (variant === "yarn") {
+        ctx.fillStyle = "#f472b6";
+        ctx.beginPath();
+        ctx.arc(x, y, size / 2.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#9d174d";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(x, y, size / 3.2, 0.2, Math.PI * 1.4);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(x - 2, y + 1, size / 4, -0.4, Math.PI);
+        ctx.stroke();
+        return;
+      }
+
+      if (variant === "mouse") {
+        ctx.fillStyle = "#a8a29e";
+        ctx.beginPath();
+        ctx.ellipse(x, y, size / 2.4, size / 3.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#78716c";
+        ctx.beginPath();
+        ctx.arc(x - size / 3.5, y - size / 4, 4, 0, Math.PI * 2);
+        ctx.arc(x - size / 5, y - size / 3.2, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#57534e";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x + size / 3, y);
+        ctx.quadraticCurveTo(x + size / 1.5, y + 6, x + size / 1.2, y - 2);
+        ctx.stroke();
+        ctx.fillStyle = "#000";
+        ctx.fillRect(x - size / 2.6, y - 1, 2, 2);
+        return;
+      }
+
+      if (variant === "bell") {
+        ctx.fillStyle = "#fbbf24";
+        ctx.beginPath();
+        ctx.moveTo(x - size / 2.4, y + size / 4);
+        ctx.lineTo(x - size / 3.5, y - size / 4);
+        ctx.quadraticCurveTo(x, y - size / 2.2, x + size / 3.5, y - size / 4);
+        ctx.lineTo(x + size / 2.4, y + size / 4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#b45309";
+        ctx.beginPath();
+        ctx.arc(x, y + size / 3.5, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#fde68a";
+        ctx.fillRect(x - 2, y - size / 2.4, 4, 4);
+        return;
+      }
+
+      // feather
+      ctx.fillStyle = "#38bdf8";
+      ctx.beginPath();
+      ctx.moveTo(x, y - size / 2);
+      ctx.quadraticCurveTo(x + size / 2.5, y, x, y + size / 2);
+      ctx.quadraticCurveTo(x - size / 2.5, y, x, y - size / 2);
+      ctx.fill();
+      ctx.strokeStyle = "#0ea5e9";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, y - size / 2.2);
+      ctx.lineTo(x, y + size / 2.2);
+      ctx.stroke();
+      ctx.fillStyle = "#f97316";
+      ctx.fillRect(x - 1.5, y + size / 2.2, 3, 6);
+    }
+
     let animationId: number;
     let currentScore = 0;
     let prevCatX = cat.x;
+    let hitFlash = 0;
 
     function update() {
       if (!ctx) return;
@@ -268,26 +359,44 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
 
       drawBackground();
 
+      if (hitFlash > 0) {
+        ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.22, hitFlash / 18)})`;
+        ctx.fillRect(0, 0, width, height);
+        hitFlash -= 1;
+      }
+
       drawAmericanCurlCat(cat.x, cat.y, deltaCatX, speed > 0.5);
       drawPixelBoy(boy.x, boy.y);
 
-      for (let i = sourdoughs.length - 1; i >= 0; i--) {
-        const s = sourdoughs[i];
-        s.y += s.speed;
-        drawSourdough(s.x, s.y, s.size);
+      for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        item.y += item.speed;
 
-        const dist = Math.hypot(boy.x - s.x, boy.y - s.y);
+        if (item.kind === "sourdough") {
+          drawSourdough(item.x, item.y, item.size);
+        } else {
+          drawCatToy(item.x, item.y, item.size, item.toy);
+        }
+
+        const dist = Math.hypot(boy.x - item.x, boy.y - item.y);
         if (dist < boy.size) {
-          sourdoughs.splice(i, 1);
-          currentScore += 1;
-          setScore(currentScore);
+          items.splice(i, 1);
 
-          if (currentScore >= requiredScore) {
-            setTimeout(onComplete, 400);
-            return;
+          if (item.kind === "sourdough") {
+            currentScore += 1;
+            setScore(currentScore);
+
+            if (currentScore >= requiredScore) {
+              setTimeout(onComplete, 400);
+              return;
+            }
+          } else {
+            currentScore = Math.max(0, currentScore - 1);
+            setScore(currentScore);
+            hitFlash = 14;
           }
-        } else if (s.y > grassTop + 20) {
-          sourdoughs.splice(i, 1);
+        } else if (item.y > grassTop + 20) {
+          items.splice(i, 1);
         }
       }
 
@@ -322,6 +431,9 @@ export default function LoadingGame({ onComplete }: LoadingGameProps) {
           </h1>
           <div className="text-xs text-stone-700 font-bold font-mono">
             Caught: {score} / {requiredScore}
+          </div>
+          <div className="text-[11px] text-stone-600 font-semibold font-mono">
+            Catch bread · dodge cat toys
           </div>
         </div>
 
