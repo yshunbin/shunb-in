@@ -35,7 +35,7 @@ export default function Home() {
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Distributed Systems</span>
               </div>
               <p className="text-base md:text-lg text-ink font-medium tracking-tight">
-                Codes by day · Journals by night · Bakes for the gut
+                Codes · Journals · Bakes
               </p>
               <p className="text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed text-pretty">
                 I build reliable backend systems — from monitoring tools and automation to
