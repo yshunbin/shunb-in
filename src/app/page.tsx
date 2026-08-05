@@ -34,7 +34,7 @@ export default function Home() {
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Java</span>
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Distributed Systems</span>
               </div>
-              <p className="text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed">
+              <p className="text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed text-pretty">
                 I build reliable backend systems — from monitoring tools and automation to
                 cloud infrastructure — with a focus on clarity, scale, and craft.
               </p>
@@ -123,9 +123,8 @@ export default function Home() {
                   </h3>
                   <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">May – Jun 2025</span>
                 </div>
-                <p className="text-sm text-ink-soft leading-relaxed">
-                  Full-stack task tracker with CRUD, Maven/PostgreSQL persistence, React frontend,
-                  and Dockerized delivery.
+                <p className="text-sm text-ink-soft leading-relaxed text-pretty">
+                  Task tracker with CRUD, PostgreSQL, React UI, and Docker deploys.
                 </p>
                 <p className="text-xs text-accent font-medium pt-1">
                   Java · Spring · PostgreSQL · Node.js · Docker
@@ -137,9 +136,9 @@ export default function Home() {
                   <h3 className="text-lg font-semibold tracking-tight">NozzieMozzie</h3>
                   <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">Jan – Apr 2021</span>
                 </div>
-                <p className="text-sm text-ink-soft leading-relaxed">
-                  Android app with clickable dengue cluster polygons across Singapore via Google
-                  Maps SDK and the NEA API.
+                <p className="text-sm text-ink-soft leading-relaxed text-pretty">
+                  Android app mapping Singapore dengue clusters as interactive polygons with Google
+                  Maps SDK and the NEA GeoJSON API.
                 </p>
                 <p className="text-xs text-accent font-medium pt-1">
                   Java · Android Studio · Postman · GeoJSON
@@ -154,83 +153,108 @@ export default function Home() {
               {[
                 {
                   company: "Defence Science and Technology Agency",
-                  role: "Software Engineer",
-                  dates: "Jan 2026 – Present",
                   active: true,
-                  points: [
-                    "Developed and deployed a systems monitoring tool with Java 17, Spring Boot, and SQLite, using PowerShell probes to automate software asset changes and alert on backup failures.",
-                    "Built Dataiku dashboards and trained AI agents to analyse trends across data files and automate policy comparisons for compliance stakeholders.",
+                  roles: [
+                    {
+                      title: "Software Engineer",
+                      dates: "Jan 2026 – Present",
+                      points: [
+                        "Built a Java 17 / Spring Boot / SQLite systems monitor with PowerShell probes that automate software asset changes and alert on backup failures.",
+                        "Built Dataiku dashboards and trained AI agents to analyse trends and automate policy comparisons for compliance stakeholders.",
+                      ],
+                    },
                   ],
                 },
                 {
                   company: "Hewlett Packard Enterprise",
-                  role: "Software Engineer",
-                  dates: "Jul 2023 – Jan 2025",
                   active: false,
-                  points: [
-                    "Developed real-time shell scripts for Aruba (AOS-CX) using SNMP, CLI, and API calls to automate data collection and configuration changes, while driving SDLC improvements through module migrations and issue resolution.",
-                  ],
-                },
-                {
-                  company: "Hewlett Packard Enterprise",
-                  role: "Software Engineer Intern",
-                  dates: "Jan 2023 – May 2023",
-                  active: false,
-                  points: [
-                    "Reduced support tasks by automating unit test frameworks to evaluate network performance in a pre-prod environment.",
+                  roles: [
+                    {
+                      title: "Software Engineer",
+                      dates: "Jul 2023 – Jan 2025",
+                      points: [
+                        "Developed real-time Aruba (AOS-CX) automation with SNMP, CLI, and APIs for data collection, config changes, and SDLC module migrations.",
+                      ],
+                    },
+                    {
+                      title: "Software Engineer Intern",
+                      dates: "Jan 2023 – May 2023",
+                      points: [
+                        "Reduced support load by automating unit-test frameworks that evaluate network performance in pre-prod.",
+                      ],
+                    },
                   ],
                 },
                 {
                   company: "Acronis",
-                  role: "Software Engineer Intern",
-                  dates: "Jun 2022 – Dec 2022",
                   active: false,
-                  points: [
-                    "Deployed hardware-encrypted GCP infrastructure on Intel and AMD-SEV servers to benchmark performance and host Docker containers in confidential computing Linux KVM environments.",
-                    "Implemented an ELK stack pipeline to index and search backup metadata across large-scale databases and configuration files.",
+                  roles: [
+                    {
+                      title: "Software Engineer Intern",
+                      dates: "Jun 2022 – Dec 2022",
+                      points: [
+                        "Deployed hardware-encrypted GCP hosts on Intel/AMD-SEV to benchmark and run Docker in confidential Linux KVM environments.",
+                        "Built an ELK pipeline to index and search backup metadata across large-scale databases and config files.",
+                      ],
+                    },
                   ],
                 },
                 {
                   company: "Pixium Digital",
-                  role: "Software Engineer Intern",
-                  dates: "Jan 2022 – May 2022",
                   active: false,
-                  points: [
-                    "Developed full-stack web applications and HR tools with PHP, Yii 2.0, jQuery, and AJAX, using AWS S3 and LocalStack for scalable cloud data management.",
+                  roles: [
+                    {
+                      title: "Software Engineer Intern",
+                      dates: "Jan 2022 – May 2022",
+                      points: [
+                        "Developed full-stack HR tools with PHP, Yii 2.0, jQuery, and AJAX on AWS S3 and LocalStack for scalable cloud data.",
+                      ],
+                    },
                   ],
                 },
                 {
                   company: "Hubble",
-                  role: "Software Engineer Intern",
-                  dates: "Aug 2021 – Nov 2021",
                   active: false,
-                  points: [
-                    "Migrated a monolithic backend to Ruby on Rails microservices with Docker Compose and Kubernetes, with full API validation via Postman.",
-                    "Built asynchronous React features with Redux Saga for control flow and backend integration.",
+                  roles: [
+                    {
+                      title: "Software Engineer Intern",
+                      dates: "Aug 2021 – Nov 2021",
+                      points: [
+                        "Migrated a monolith to Ruby on Rails microservices with Docker Compose, Kubernetes, and Postman API validation.",
+                        "Built async React features with Redux Saga for control flow and backend integration.",
+                      ],
+                    },
                   ],
                 },
               ].map((job) => (
-                <div
-                  key={`${job.company}-${job.role}-${job.dates}`}
-                  className="grid md:grid-cols-[1fr_auto] gap-2 md:gap-8"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`w-2 h-2 rounded-full ${job.active ? "bg-accent" : "bg-border"}`}
-                      />
-                      <h3 className="text-lg font-semibold tracking-tight">{job.company}</h3>
-                    </div>
-                    <p className={`text-sm font-medium ${job.active ? "text-accent" : "text-ink-soft"}`}>
-                      {job.role}
-                    </p>
-                    <ul className="list-disc list-inside text-sm text-ink-soft space-y-1.5 leading-relaxed">
-                      {job.points.map((point) => (
-                        <li key={point}>{point}</li>
-                      ))}
-                    </ul>
+                <div key={job.company} className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`w-2 h-2 rounded-full shrink-0 ${job.active ? "bg-accent" : "bg-border"}`}
+                    />
+                    <h3 className="text-lg font-semibold tracking-tight">{job.company}</h3>
                   </div>
-                  <p className="text-sm text-ink-soft md:text-right whitespace-nowrap">{job.dates}</p>
+                  <div className="space-y-4 pl-4">
+                    {job.roles.map((role) => (
+                      <div key={`${role.title}-${role.dates}`} className="space-y-2">
+                        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6">
+                          <p
+                            className={`text-sm font-medium ${job.active ? "text-accent" : "text-ink-soft"}`}
+                          >
+                            {role.title}
+                          </p>
+                          <p className="text-sm text-ink-soft whitespace-nowrap shrink-0">
+                            {role.dates}
+                          </p>
+                        </div>
+                        <ul className="list-disc list-outside ml-4 pl-0 text-sm text-ink-soft space-y-1.5 leading-relaxed text-pretty">
+                          {role.points.map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
