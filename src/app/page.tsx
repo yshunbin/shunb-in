@@ -34,9 +34,6 @@ export default function Home() {
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Java</span>
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Distributed Systems</span>
               </div>
-              <p className="text-base md:text-lg text-ink font-medium tracking-tight">
-                Codes · Journals · Bakes
-              </p>
               <p className="text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed text-pretty">
                 I build reliable backend systems — from monitoring tools and automation to
                 cloud infrastructure — with a focus on clarity, scale, and craft.
@@ -162,8 +159,9 @@ export default function Home() {
                       title: "Software Engineer",
                       dates: "Jan 2026 – Present",
                       points: [
+                        "Streamlined software EOS/EOL tracking with Lovable AI (Gemini) and a colour-coded Dataiku dashboard so ops and management can triage risk without one-by-one lookups.",
                         "Built a Java 17 / Spring Boot / SQLite systems monitor with PowerShell probes that automate software asset changes and alert on backup failures.",
-                        "Built Dataiku dashboards and trained AI agents to analyse trends and automate policy comparisons for compliance stakeholders.",
+                        "Partnered with compliance stakeholders to train AI agents and ship Dataiku dashboards that analyse trends and automate policy comparisons.",
                       ],
                     },
                   ],
@@ -384,6 +382,77 @@ export function LeetCodeProjectCard() {
 
       <div className="flex flex-wrap gap-2 text-sm">
         {["Google Sheets", "Java", "Algorithms", "Trends"].map((tag) => (
+          <span key={tag} className="diary-chip px-3 py-1 font-medium">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+export function DragployedProjectCard() {
+  return (
+    <article className="diary-card p-6 space-y-4">
+      <div className="flex justify-between items-start">
+        <p className="diary-label">Interview Prep</p>
+        <Link
+          href="/hobbies/dragployed"
+          transitionTypes={["nav-forward"]}
+          className="diary-btn-soft text-xs flex items-center gap-1 px-3 py-1.5"
+        >
+          <span>View</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
+      <Link href="/hobbies/dragployed" transitionTypes={["nav-forward"]}>
+        <h3 className="diary-title text-3xl hover:text-accent transition">Dragployed</h3>
+      </Link>
+      <p className="text-base text-ink-soft leading-relaxed">
+        A drag-and-drop crash course for Forward Deployed Engineer interviews — sort FDE vs
+        platform work, pick field moves, and sequence a real engagement.
+      </p>
+
+      <div className="flex flex-wrap gap-2 text-sm">
+        {["FDE", "Drag & Drop", "Interview Prep", "Scenarios"].map((tag) => (
+          <span key={tag} className="diary-chip px-3 py-1 font-medium">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+export function FypImagePredictionCard() {
+  return (
+    <article className="diary-card p-6 space-y-4">
+      <div className="flex justify-between items-start">
+        <p className="diary-label">FYP</p>
+        <Link
+          href="/projects/fyp-image-prediction"
+          transitionTypes={["nav-forward"]}
+          className="diary-btn-soft text-xs flex items-center gap-1 px-3 py-1.5"
+        >
+          <span>View</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
+      <Link href="/projects/fyp-image-prediction" transitionTypes={["nav-forward"]}>
+        <h3 className="diary-title text-3xl hover:text-accent transition">
+          FYP — Self-supervised Model for Image Prediction
+        </h3>
+      </Link>
+      <p className="text-base text-ink-soft leading-relaxed">
+        NTU final-year project: a self-supervised autoencoder that restores randomly missing
+        image patches from context. Try it live — upload an image, mask a patch, and see
+        reconstruction accuracy.
+      </p>
+
+      <div className="flex flex-wrap gap-2 text-sm">
+        {["Self-supervised", "Autoencoder", "Inpainting", "TensorFlow"].map((tag) => (
           <span key={tag} className="diary-chip px-3 py-1 font-medium">
             {tag}
           </span>

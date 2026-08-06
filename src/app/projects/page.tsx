@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LeetCodeProjectCard, ProjectCard } from "../page";
+import { FypImagePredictionCard, LeetCodeProjectCard, ProjectCard } from "../page";
 
 export default function Projects() {
   return (
@@ -21,6 +21,7 @@ export default function Projects() {
           </p>
         </header>
         <section className="pl-3 md:pl-4 space-y-4">
+          <FypImagePredictionCard />
           <ProjectCard />
           <LeetCodeProjectCard />
         </section>

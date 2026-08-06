@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BookOpen, ExternalLink, Wheat } from "lucide-react";
+import { DragployedProjectCard } from "../page";
 
 type Book = {
   title: string;
@@ -101,9 +102,14 @@ export default function HobbiesPage() {
         <header className="pl-3 md:pl-4 space-y-3">
           <h1 className="diary-title text-5xl md:text-6xl">Hobbies</h1>
           <p className="text-ink-soft text-lg max-w-xl">
-            Things I do outside work — books, bread, and staying active.
+            Things I do outside work — books, bread, staying active, and interview prep games.
           </p>
         </header>
+
+        <section className="pl-3 md:pl-4 space-y-4">
+          <h2 className="diary-label">Interview prep</h2>
+          <DragployedProjectCard />
+        </section>
 
         <section className="pl-3 md:pl-4 space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
