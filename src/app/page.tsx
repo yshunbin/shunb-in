@@ -34,7 +34,7 @@ export default function Home() {
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Java</span>
                 <span className="diary-pill px-3.5 py-1.5 text-sm">Distributed Systems</span>
               </div>
-              <p className="text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed text-pretty">
+              <p className="text-lg md:text-xl text-ink-soft leading-relaxed text-pretty">
                 I build reliable backend systems — from monitoring tools and automation to
                 cloud infrastructure — with a focus on clarity, scale, and craft.
               </p>
@@ -99,12 +99,13 @@ export default function Home() {
                 "Docker",
                 "Git",
                 "Spring Boot",
+                "Dataiku",
+                "TensorFlow",
                 "React",
                 "TypeScript",
                 "PostgreSQL",
                 "SQLite",
                 "PowerShell",
-                "Dataiku",
               ].map((skill) => (
                 <span key={skill} className="diary-chip px-3.5 py-1.5 text-sm font-medium">
                   {skill}
@@ -116,34 +117,40 @@ export default function Home() {
           <section className="space-y-4 pl-3 md:pl-4">
             <h2 className="diary-label">Featured Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <article className="diary-card p-6 space-y-3">
-                <div className="flex justify-between items-start gap-3">
-                  <h3 className="text-lg font-semibold tracking-tight">
-                    Task Tracking Web Application
-                  </h3>
-                  <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">May – Jun 2025</span>
-                </div>
-                <p className="text-sm text-ink-soft leading-relaxed text-pretty">
-                  Task tracker with CRUD, PostgreSQL, React UI, and Docker deploys.
-                </p>
-                <p className="text-xs text-accent font-medium pt-1">
-                  Java · Spring · PostgreSQL · Node.js · Docker
-                </p>
-              </article>
+              <Link href="/projects/fyp-image-prediction" transitionTypes={["nav-forward"]}>
+                <article className="diary-card p-6 space-y-3 h-full hover:border-accent/40 transition">
+                  <div className="flex justify-between items-start gap-3">
+                    <h3 className="text-lg font-semibold tracking-tight">
+                      Self-Supervised Image Inpainting
+                    </h3>
+                    <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">FYP</span>
+                  </div>
+                  <p className="text-sm text-ink-soft leading-relaxed text-pretty">
+                    Self-supervised autoencoder that reconstructs missing image regions without
+                    labelled data — raised SSIM from 0.79 to 0.97 with Bayesian hyperparameter
+                    optimisation.
+                  </p>
+                  <p className="text-xs text-accent font-medium pt-1">
+                    Python · TensorFlow · Hyperopt · NumPy
+                  </p>
+                </article>
+              </Link>
 
-              <article className="diary-card p-6 space-y-3">
-                <div className="flex justify-between items-start gap-3">
-                  <h3 className="text-lg font-semibold tracking-tight">NozzieMozzie</h3>
-                  <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">Jan – Apr 2021</span>
-                </div>
-                <p className="text-sm text-ink-soft leading-relaxed text-pretty">
-                  Android app mapping Singapore dengue clusters as interactive polygons with Google
-                  Maps SDK and the NEA GeoJSON API.
-                </p>
-                <p className="text-xs text-accent font-medium pt-1">
-                  Java · Android Studio · Postman · GeoJSON
-                </p>
-              </article>
+              <Link href="/projects/nozziemozzie" transitionTypes={["nav-forward"]}>
+                <article className="diary-card p-6 space-y-3 h-full hover:border-accent/40 transition">
+                  <div className="flex justify-between items-start gap-3">
+                    <h3 className="text-lg font-semibold tracking-tight">NozzieMozzie</h3>
+                    <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">Jan – Apr 2021</span>
+                  </div>
+                  <p className="text-sm text-ink-soft leading-relaxed text-pretty">
+                    Android app visualising dengue clusters as interactive map polygons so residents
+                    and health officials can spot high-risk areas at a glance.
+                  </p>
+                  <p className="text-xs text-accent font-medium pt-1">
+                    Java · Android Studio · Postman · GeoJSON
+                  </p>
+                </article>
+              </Link>
             </div>
           </section>
 
@@ -159,9 +166,9 @@ export default function Home() {
                       title: "Software Engineer",
                       dates: "Jan 2026 – Present",
                       points: [
-                        "Streamlined software EOS/EOL tracking with Lovable AI (Gemini) and a colour-coded Dataiku dashboard so ops and management can triage risk without one-by-one lookups.",
-                        "Built a Java 17 / Spring Boot / SQLite systems monitor with PowerShell probes that automate software asset changes and alert on backup failures.",
-                        "Partnered with compliance stakeholders to train AI agents and ship Dataiku dashboards that analyse trends and automate policy comparisons.",
+                        "Trained and deployed an AI curator (Gemini, via Lovable AI) on the software-asset system to auto-surface end-of-support/end-of-life dates — eliminating hours of manual per-asset search for compliance stakeholders.",
+                        "Built a Dataiku dashboard with colour-coded risk trends on that data, giving users and management visibility to plan software upgrades proactively.",
+                        "Developed and deployed a systems-monitoring tool (Java 17, Spring Boot, SQLite) with PowerShell probes to roll up daily backup failures into a one-week snapshot.",
                       ],
                     },
                   ],
@@ -174,14 +181,15 @@ export default function Home() {
                       title: "Software Engineer",
                       dates: "Jul 2023 – Jan 2025",
                       points: [
-                        "Developed real-time Aruba (AOS-CX) automation with SNMP, CLI, and APIs for data collection, config changes, and SDLC module migrations.",
+                        "Built real-time shell scripts for Aruba (AOS-CX) network switches (SNMP, CLI, API) to cut manual configuration time and reduce human error in enterprise customer deployments.",
+                        "Drove SDLC improvements through module migrations, unit-test performance tuning, and resolving client-reported live bugs.",
                       ],
                     },
                     {
                       title: "Software Engineer Intern",
                       dates: "Jan 2023 – May 2023",
                       points: [
-                        "Reduced support load by automating unit-test frameworks that evaluate network performance in pre-prod.",
+                        "Automated unit-test frameworks to catch network performance issues before handoff to QA, reducing manual, ad-hoc testing.",
                       ],
                     },
                   ],
@@ -194,8 +202,8 @@ export default function Home() {
                       title: "Software Engineer Intern",
                       dates: "Jun 2022 – Dec 2022",
                       points: [
-                        "Deployed hardware-encrypted GCP hosts on Intel/AMD-SEV to benchmark and run Docker in confidential Linux KVM environments.",
-                        "Built an ELK pipeline to index and search backup metadata across large-scale databases and config files.",
+                        "Deployed hardware-encrypted GCP infrastructure (Intel, AMD-SEV) to validate performance for Acronis’ secure backup product prior to release.",
+                        "Implemented an ELK stack pipeline to index and search backup metadata, cutting the time to trace a customer’s backup issue from hours of manual searching to a quick lookup.",
                       ],
                     },
                   ],
@@ -208,7 +216,7 @@ export default function Home() {
                       title: "Software Engineer Intern",
                       dates: "Jan 2022 – May 2022",
                       points: [
-                        "Developed full-stack HR tools with PHP, Yii 2.0, jQuery, and AJAX on AWS S3 and LocalStack for scalable cloud data.",
+                        "Developed full-stack web applications and HR tools (PHP, Yii 2.0, jQuery, AJAX) on AWS S3 and LocalStack — replacing manual HR paperwork with self-service tooling.",
                       ],
                     },
                   ],
@@ -221,8 +229,8 @@ export default function Home() {
                       title: "Software Engineer Intern",
                       dates: "Aug 2021 – Nov 2021",
                       points: [
-                        "Migrated a monolith to Ruby on Rails microservices with Docker Compose, Kubernetes, and Postman API validation.",
-                        "Built async React features with Redux Saga for control flow and backend integration.",
+                        "Migrated a monolithic backend to a Ruby on Rails microservices ecosystem (Docker Compose, Kubernetes), building out a dedicated user service for user-base growth.",
+                        "Developed asynchronous web features in React using Redux Saga, making the app feel responsive instead of freezing while waiting on backend calls.",
                       ],
                     },
                   ],
@@ -267,7 +275,7 @@ export default function Home() {
               {[
                 {
                   school: "Nanyang Technological University",
-                  detail: "Bachelor of Computer Science · Elective Focus in AI & ML",
+                  detail: "Bachelor of Computer Science · AI & ML Focus",
                   dates: "Aug 2019 – May 2023",
                 },
                 {
@@ -363,7 +371,7 @@ export function LeetCodeProjectCard() {
       <div className="flex justify-between items-start">
         <p className="diary-label">Tracker</p>
         <Link
-          href="/projects/leetcode"
+          href="/hobbies/leetcode"
           transitionTypes={["nav-forward"]}
           className="diary-btn-soft text-xs flex items-center gap-1 px-3 py-1.5"
         >
@@ -372,7 +380,7 @@ export function LeetCodeProjectCard() {
         </Link>
       </div>
 
-      <Link href="/projects/leetcode" transitionTypes={["nav-forward"]}>
+      <Link href="/hobbies/leetcode" transitionTypes={["nav-forward"]}>
         <h3 className="diary-title text-3xl hover:text-accent transition">LeetCode Progress</h3>
       </Link>
       <p className="text-base text-ink-soft leading-relaxed">
@@ -393,29 +401,28 @@ export function LeetCodeProjectCard() {
 
 export function DragployedProjectCard() {
   return (
-    <article className="diary-card p-6 space-y-4">
-      <div className="flex justify-between items-start">
-        <p className="diary-label">Interview Prep</p>
+    <article className="diary-card p-6 space-y-4 w-full">
+      <div className="flex justify-between items-start gap-3">
+        <Link href="/hobbies/dragployed" transitionTypes={["nav-forward"]}>
+          <h3 className="diary-title text-3xl hover:text-accent transition">Dragployed</h3>
+        </Link>
         <Link
           href="/hobbies/dragployed"
           transitionTypes={["nav-forward"]}
-          className="diary-btn-soft text-xs flex items-center gap-1 px-3 py-1.5"
+          className="diary-btn-soft text-xs flex items-center gap-1 px-3 py-1.5 shrink-0"
         >
           <span>View</span>
           <ExternalLink className="w-3.5 h-3.5" />
         </Link>
       </div>
 
-      <Link href="/hobbies/dragployed" transitionTypes={["nav-forward"]}>
-        <h3 className="diary-title text-3xl hover:text-accent transition">Dragployed</h3>
-      </Link>
-      <p className="text-base text-ink-soft leading-relaxed">
+      <p className="text-base text-ink-soft leading-relaxed max-w-none">
         A drag-and-drop crash course for Forward Deployed Engineer interviews — sort FDE vs
         platform work, pick field moves, and sequence a real engagement.
       </p>
 
       <div className="flex flex-wrap gap-2 text-sm">
-        {["FDE", "Drag & Drop", "Interview Prep", "Scenarios"].map((tag) => (
+        {["FDE", "Drag & Drop", "Practice", "Scenarios"].map((tag) => (
           <span key={tag} className="diary-chip px-3 py-1 font-medium">
             {tag}
           </span>

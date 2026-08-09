@@ -350,7 +350,7 @@ export default function DragployedPage() {
         </Link>
 
         <header className="pl-3 md:pl-4 space-y-3">
-          <p className="diary-label">Interview Prep</p>
+          <p className="diary-label">Ever learning</p>
           <h1 className="diary-title text-5xl md:text-6xl">Dragployed</h1>
           <p className="text-ink-soft text-lg max-w-2xl leading-relaxed">
             A drag-and-drop crash course for Forward Deployed Engineer thinking — sort the

@@ -16,6 +16,7 @@ import {
   Smartphone,
   ChevronRight,
   RefreshCw,
+  ExternalLink,
 } from "lucide-react";
 
 type DiscType = "D" | "I" | "S" | "C";
@@ -144,16 +145,27 @@ export default function FAChatPage() {
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 diary-card p-2 rounded-xl text-sm text-ink-soft">
-            <span className="font-semibold px-2">SG Tone:</span>
-            <button
-              onClick={() => setUseLocalTone(!useLocalTone)}
-              className={`px-3 py-1.5 rounded-xl font-semibold transition ${
-                useLocalTone ? "diary-btn" : "diary-btn-soft"
-              }`}
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href="https://github.com/yshunbin/discipher"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="diary-btn-soft text-sm inline-flex items-center gap-1.5 px-3 py-1.5"
             >
-              {useLocalTone ? "Warm / Local" : "Formal"}
-            </button>
+              <span>GitHub</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <div className="flex items-center space-x-3 diary-card p-2 rounded-xl text-sm text-ink-soft">
+              <span className="font-semibold px-2">SG Tone:</span>
+              <button
+                onClick={() => setUseLocalTone(!useLocalTone)}
+                className={`px-3 py-1.5 rounded-xl font-semibold transition ${
+                  useLocalTone ? "diary-btn" : "diary-btn-soft"
+                }`}
+              >
+                {useLocalTone ? "Warm / Local" : "Formal"}
+              </button>
+            </div>
           </div>
         </header>
 

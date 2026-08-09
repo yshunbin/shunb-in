@@ -114,15 +114,15 @@ export default function LeetCodeProjectPage() {
     <main className="min-h-screen text-ink p-4 md:p-8 lg:p-12">
       <div className="diary-page max-w-6xl mx-auto px-8 md:px-16 py-10 md:py-14 space-y-10">
         <Link
-          href="/projects"
+          href="/hobbies"
           transitionTypes={["nav-back"]}
           className="inline-flex items-center gap-2 text-sm text-ink-soft hover:text-accent transition pl-3 md:pl-4"
         >
-          <span>← Projects</span>
+          <span>← Hobbies</span>
         </Link>
 
         <header className="pl-3 md:pl-4 space-y-3">
-          <p className="diary-label">Tracker</p>
+          <p className="diary-label">Ever learning</p>
           <h1 className="diary-title text-5xl md:text-6xl">LeetCode Progress</h1>
           <p className="text-ink-soft text-lg max-w-2xl">
             {
