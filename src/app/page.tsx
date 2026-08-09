@@ -117,6 +117,22 @@ export default function Home() {
           <section className="space-y-4 pl-3 md:pl-4">
             <h2 className="diary-label">Featured Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Link href="/projects/discipher" transitionTypes={["nav-forward"]}>
+                <article className="diary-card p-6 space-y-3 h-full hover:border-accent/40 transition">
+                  <div className="flex justify-between items-start gap-3">
+                    <h3 className="text-lg font-semibold tracking-tight">DISCipher</h3>
+                    <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">Jul 2026</span>
+                  </div>
+                  <p className="text-sm text-ink-soft leading-relaxed text-pretty">
+                    Outreach assistant for financial planning agents — DISC-tailored appointment
+                    hooks with WhatsApp linking and dynamic QR codes.
+                  </p>
+                  <p className="text-xs text-accent font-medium pt-1">
+                    Next.js · Gemini · WhatsApp · DISC
+                  </p>
+                </article>
+              </Link>
+
               <Link href="/projects/fyp-image-prediction" transitionTypes={["nav-forward"]}>
                 <article className="diary-card p-6 space-y-3 h-full hover:border-accent/40 transition">
                   <div className="flex justify-between items-start gap-3">
@@ -132,22 +148,6 @@ export default function Home() {
                   </p>
                   <p className="text-xs text-accent font-medium pt-1">
                     Python · TensorFlow · Hyperopt · NumPy
-                  </p>
-                </article>
-              </Link>
-
-              <Link href="/projects/nozziemozzie" transitionTypes={["nav-forward"]}>
-                <article className="diary-card p-6 space-y-3 h-full hover:border-accent/40 transition">
-                  <div className="flex justify-between items-start gap-3">
-                    <h3 className="text-lg font-semibold tracking-tight">NozzieMozzie</h3>
-                    <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">Jan – Apr 2021</span>
-                  </div>
-                  <p className="text-sm text-ink-soft leading-relaxed text-pretty">
-                    Android app visualising dengue clusters as interactive map polygons so residents
-                    and health officials can spot high-risk areas at a glance.
-                  </p>
-                  <p className="text-xs text-accent font-medium pt-1">
-                    Java · Android Studio · Postman · GeoJSON
                   </p>
                 </article>
               </Link>
