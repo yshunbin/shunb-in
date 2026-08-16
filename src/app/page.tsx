@@ -121,7 +121,7 @@ export default function Home() {
                 <article className="diary-card p-6 space-y-3 h-full hover:border-accent/40 transition">
                   <div className="flex justify-between items-start gap-3">
                     <h3 className="text-lg font-semibold tracking-tight">DISCipher</h3>
-                    <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">Jul 2026</span>
+                    <span className="diary-pill shrink-0 text-[11px] px-2.5 py-1">AI Tool</span>
                   </div>
                   <p className="text-sm text-ink-soft leading-relaxed text-pretty">
                     Outreach assistant for financial planning agents — DISC-tailored appointment
