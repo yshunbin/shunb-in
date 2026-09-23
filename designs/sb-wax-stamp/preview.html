@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SB Wax Stamp — Design Concepts</title>
+    <style>
+      :root {
+        --ink: #1c1917;
+        --muted: #57534e;
+        --paper: #f7f3ec;
+        --line: #e7e0d4;
+        --accent: #7f1d1d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, #fff9f0 0%, transparent 40%),
+          linear-gradient(180deg, #faf6ef 0%, var(--paper) 100%);
+        min-height: 100vh;
+      }
+      header {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 24px 16px;
+      }
+      header p.kicker {
+        margin: 0 0 8px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: var(--accent);
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      header .lede {
+        max-width: 42rem;
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.55;
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px 24px 72px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 28px;
+      }
+      article {
+        background: rgba(255, 255, 255, 0.55);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      article img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        background: #fff;
+      }
+      article .meta {
+        padding: 16px 18px 20px;
+      }
+      article .meta span {
+        display: inline-block;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 6px;
+      }
+      article h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+      article p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+      footer {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px 56px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p class="kicker">Design direction board</p>
+      <h1>SB Wax Stamp Concepts</h1>
+      <p class="lede">
+        Seven directions for a custom wax seal monogram. Share this board with
+        the designer and customer to pick a style before refining to final die
+        artwork.
+      </p>
+    </header>
+    <main>
+      <article>
+        <img src="sb-wax-stamp-01-classic-serif.png" alt="Classic serif SB wax seal" />
+        <div class="meta">
+          <span>01</span>
+          <h2>Classic Serif</h2>
+          <p>Interlocking monogram, formal and timeless.</p>
+        </div>
+      </article>
+      <article>
+        <img src="sb-wax-stamp-01-classic-serif-bw.png" alt="Classic serif SB wax seal black and white die" />
+        <div class="meta">
+          <span>01b · Selected</span>
+          <h2>Classic Serif — B&amp;W Die</h2>
+          <p>High-contrast version ready to send to the designer.</p>
+        </div>
+      </article>
+      <article>
+        <img src="sb-wax-stamp-02-modern-minimal.png" alt="Modern minimal SB wax seal" />
+        <div class="meta">
+          <span>02</span>
+          <h2>Modern Minimal</h2>
+          <p>Clean geometric letters, contemporary branding.</p>
+        </div>
+      </article>
+      <article>
+        <img src="sb-wax-stamp-03-victorian-ornate.png" alt="Victorian ornate SB wax seal" />
+        <div class="meta">
+          <span>03</span>
+          <h2>Victorian Ornate</h2>
+          <p>Filigree flourishes for luxury and heritage.</p>
+        </div>
+      </article>
+      <article>
+        <img src="sb-wax-stamp-04-botanical-wreath.png" alt="Botanical wreath SB wax seal" />
+        <div class="meta">
+          <span>04</span>
+          <h2>Botanical Wreath</h2>
+          <p>Serif initials inside a soft leaf wreath.</p>
+        </div>
+      </article>
+      <article>
+        <img src="sb-wax-stamp-05-art-deco.png" alt="Art Deco SB wax seal" />
+        <div class="meta">
+          <span>05</span>
+          <h2>Art Deco</h2>
+          <p>Sunburst geometry, bold and dramatic.</p>
+        </div>
+      </article>
+      <article>
+        <img src="sb-wax-stamp-06-heraldic-crest.png" alt="Heraldic crest SB wax seal" />
+        <div class="meta">
+          <span>06</span>
+          <h2>Heraldic Crest</h2>
+          <p>Shield monogram with traditional formality.</p>
+        </div>
+      </article>
+      <article>
+        <img src="sb-wax-stamp-07-line-art-die.png" alt="Line art die for SB wax stamp" />
+        <div class="meta">
+          <span>07</span>
+          <h2>Die Line Art</h2>
+          <p>Black/white engraving template for the maker.</p>
+        </div>
+      </article>
+    </main>
+    <footer>
+      Concepts for review only. After selection, refine to vector artwork at
+      final die diameter (typically 22–30 mm).
+    </footer>
+  </body>
+</html>
